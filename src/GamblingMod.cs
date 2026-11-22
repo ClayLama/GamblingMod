@@ -22,6 +22,7 @@ public static class GamblingModMain
 
         // Register your content...
         StarterContent.RegisterStarterContent();
+        GamblingContent.RegisterContent();
 
         Logger.Info("Initialized.");
     }
