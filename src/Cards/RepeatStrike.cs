@@ -23,21 +23,24 @@ class RepeatStrike : ModSmithCardModel
   {
     ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
 
+    // roll first: each success adds a hit, the first failure stops
     int hits = 0;
-    bool again;
-    do
+    while (hits < 200 && (RunState?.Rng.Niche.NextBool() ?? Rng.Chaotic.NextBool()))
     {
-      await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-        .FromCard(this, cardPlay)
-        .Targeting(cardPlay.Target)
-        .WithHitFx("vfx/vfx_attack_slash")
-        .Execute(choiceContext);
-
       hits++;
-      again = RunState?.Rng.Niche.NextBool() ?? Rng.Chaotic.NextBool();
-    } while (again && hits < 1);   // 1 for the first test, then 20
-  }
+    }
 
+    GamblingModMain.Logger.Info($"RepeatStrike hits: {hits}");
+
+    if (hits == 0) return;   // unlucky: no damage
+
+    await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+      .WithHitCount(hits)
+      .FromCard(this, cardPlay)
+      .Targeting(cardPlay.Target)
+      .WithHitFx("vfx/vfx_attack_slash")
+      .Execute(choiceContext);
+  }
   protected override void OnUpgrade()
   {
     DynamicVars.Damage.UpgradeValueBy(3m);
