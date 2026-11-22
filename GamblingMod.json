@@ -1,0 +1,14 @@
+{
+  "id": "GamblingMod",
+  "name": "GamblingMod",
+  "author": "[OGER] Venttix",
+  "description": "Mod for Slay the Spire 2",
+  "version": "v0.0.0",
+  "min_game_version": "0.113.1",
+  "has_pck": true,
+  "has_dll": true,
+  "dependencies": [
+  { "id": "ModSmith" }
+  ],
+  "affects_gameplay": true
+}
